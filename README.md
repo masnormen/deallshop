@@ -1,6 +1,6 @@
-# Anicore
+# DeallShop
 
-**Anicore** is a simple anime directory app
+**DeallShop** is a simple e-commerce admin showcase app
 
 ## :package: Installation
 
@@ -10,33 +10,31 @@ NPM:
 
 ```sh
 $ npm install
-```
-
-Yarn:
-
-```sh
+#or
 $ yarn install
 ```
 
-copy the env file
+(Important!) Copy the .env file
 
 ```sh
 $ cp .env.example .env
 ```
 
-and run it
+You might need to reload your shell/terminal. And run it:
 
 ```sh
-$ npm run dev // or yarn dev
+$ npm run dev
+#or
+$ yarn dev
 ```
 
 You can also build the image with docker:
 
 ```sh
-$ docker build -t anicore:dev .
+$ docker build -t deallshop:dev .
 ```
 
-and run it
+And run it
 
 ```sh
 $ docker run \
@@ -46,5 +44,5 @@ $ docker run \
     -v /app/node_modules \
     -p 3001:3000 \
     -e CHOKIDAR_USEPOLLING=true \
-    anicore:dev
+    deallshop:dev
 ```

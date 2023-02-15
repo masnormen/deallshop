@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export type DummyResponse<Key extends string, Data> = Record<Key, Data[]> & {
   total: number;
   skip: number;
