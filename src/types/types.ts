@@ -22,7 +22,7 @@ export interface Product {
 
 export interface Cart {
   id: number;
-  products: Product[];
+  products: CartProduct[];
   total: number;
   discountedTotal: number;
   userId: number;

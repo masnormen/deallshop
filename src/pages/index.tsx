@@ -10,17 +10,16 @@ import { useDeallShopStore } from '../store/store';
 import type { Product } from '../types/types';
 import { useEffect, useMemo, useState } from 'react';
 import useProducts from '../hooks/useProducts';
-import { Disclosure } from '@headlessui/react';
 import FilterBox from '../components/FilterBox';
 import { useDebounce } from 'use-debounce';
 
-import type { ChartData } from 'chart.js';
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
 import { countBy } from 'underscore';
 
 import autocolors from 'chartjs-plugin-autocolors';
+import Link from 'next/link';
 ChartJS.register(ArcElement, Tooltip, autocolors);
 
 function getRandomColors(length: number) {
@@ -84,23 +83,10 @@ function Home() {
         accessorKey: 'category',
         cell: (row) => (row.getValue() as string).toLocaleUpperCase(),
       },
-      // {
-      //   header: 'Status',
-      //   accessorKey: 'status',
-      //   cell: (row) => (
-      //     <span
-      //       className={`px-1.5 py-1 ${
-      //         statusColor[row.getValue() as Status]
-      //       } rounded-lg text-xs font-semibold uppercase text-white`}
-      //     >
-      //       {row.getValue() as string}
-      //     </span>
-      //   ),
-      // },
     ],
     []
   );
-  const { data: rows, brands, categories } = useProducts();
+  const { data: rows, brands, categories, isLoading } = useProducts();
 
   const dataCount = useMemo(
     () => Object.entries(countBy(rows ?? [], (v) => v.brand)).sort((a, b) => a[1] - b[1]),
@@ -108,17 +94,6 @@ function Home() {
   );
 
   const dataColors = useMemo(() => getRandomColors(dataCount.length), [dataCount]);
-
-  // const chartData: ChartData<'pie', number[], string> = {
-  //   labels: Object.keys(dataCount),
-  //   datasets: [
-  //     {
-  //       label: 'Brand',
-  //       data: Object.values(dataCount),
-  //       hoverOffset: 4,
-  //     },
-  //   ],
-  // };
 
   const {
     setBrand,
@@ -131,15 +106,15 @@ function Home() {
     ...filters
   } = useDeallShopStore((state) => state);
 
-  const [domFilterExpanded, setDomFilterExpanded] = useState(false);
+  const [domFilterExpanded, setDomFilterExpanded] = useState<boolean>(false);
   useEffect(() => setDomFilterExpanded(isFilterExpanded), [isFilterExpanded]);
 
   // Filters
-  const [brand, setRawBrand] = useState<Product['brand'] | null>(null);
-  const [category, setRawCategory] = useState<Product['category'] | null>(null);
+  const [brand, setRawBrand] = useState<Product['brand'] | null>(filters.brand);
+  const [category, setRawCategory] = useState<Product['category'] | null>(filters.category);
 
-  const [rawMinPrice, setRawMinPrice] = useState<number | null>(null);
-  const [rawMaxPrice, setRawMaxPrice] = useState<number | null>(null);
+  const [rawMinPrice, setRawMinPrice] = useState<number | null>(filters.minPrice);
+  const [rawMaxPrice, setRawMaxPrice] = useState<number | null>(filters.maxPrice);
   const [minPrice] = useDebounce(rawMinPrice, 200);
   const [maxPrice] = useDebounce(rawMaxPrice, 200);
 
@@ -166,13 +141,24 @@ function Home() {
   return (
     <main className="bg-mesh flex min-h-screen flex-col items-center justify-center from-yellow-200 via-red-500 to-fuchsia-500 bg-fixed">
       <div className="container flex max-w-4xl flex-col items-center justify-center space-y-6 px-8 py-32 lg:py-48 lg:px-12">
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a
-          className="flex bg-gradient-to-t from-gray-900 to-gray-700 bg-clip-text text-7xl font-extrabold leading-relaxed text-transparent"
-          href="/"
-        >
-          <h1 className="text-center">Products</h1>
-        </a>
+        <div className="flex flex-row space-x-4">
+          <Link href="/">
+            <button
+              type="button"
+              className="relative w-full rounded-lg border-2 border-blue-300 bg-blue-500 py-2 px-2 text-lg text-white shadow-md hover:bg-blue-600 hover:outline-none focus:ring-0"
+            >
+              Products
+            </button>
+          </Link>
+          <Link href="/carts">
+            <button
+              type="button"
+              className="relative w-full rounded-lg border-2 border-gray-200 bg-white py-2 px-2 text-lg shadow-md hover:bg-gray-300 hover:outline-none focus:ring-0"
+            >
+              Carts
+            </button>
+          </Link>
+        </div>
         <div className="relative flex h-10 min-h-fit w-full">
           <Search />
         </div>
@@ -211,7 +197,13 @@ function Home() {
           </div>
         </div>
         <div className="flex w-full flex-col space-y-6">
-          <Table<Product> columns={columns} rows={rows ?? []} filters={filters} hiddenColumns={[]} />
+          <Table<Product>
+            isLoading={isLoading}
+            columns={columns}
+            rows={rows ?? []}
+            filters={filters}
+            hiddenColumns={[]}
+          />
         </div>
 
         <div className="flex w-full max-w-sm flex-col items-center space-y-6 pt-24">

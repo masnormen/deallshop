@@ -12,13 +12,14 @@ import { useMemo, useState } from 'react';
 // import { generateEnumFilterFn, generateDateFilterFn } from '../lib/generateFilterFn';
 import type { Product } from '../types/types';
 import type { DeallShopStoreState } from '../types/store';
+import Spinner from './Spinner';
 
 const sortIcon: Record<SortDirection, string> = {
   asc: '↑',
   desc: '↓',
 };
 
-function filterData(rows: Product[], filter: DeallShopStoreState) {
+function filterData(rows: Product[], filter?: DeallShopStoreState) {
   return rows.filter((row) => {
     // Guard statements for filtering
     if (
@@ -38,12 +39,13 @@ function filterData(rows: Product[], filter: DeallShopStoreState) {
 
 interface TableProps<T extends object> {
   rows: T[];
+  isLoading?: boolean;
   columns: ColumnDef<T>[];
   hiddenColumns?: (keyof T)[];
-  filters: DeallShopStoreState;
+  filters?: DeallShopStoreState;
 }
 
-function Table<T extends object>({ rows, columns, hiddenColumns, filters }: TableProps<T>): JSX.Element {
+function Table<T extends object>({ rows, columns, isLoading, hiddenColumns, filters }: TableProps<T>): JSX.Element {
   const data = useMemo(() => filterData(rows as Product[], filters), [rows, filters]) as T[];
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -60,6 +62,13 @@ function Table<T extends object>({ rows, columns, hiddenColumns, filters }: Tabl
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  if (isLoading !== false)
+    return (
+      <div className="flex w-full items-center justify-center rounded-md bg-white p-24 shadow-md">
+        <Spinner />
+      </div>
+    );
 
   return (
     <>

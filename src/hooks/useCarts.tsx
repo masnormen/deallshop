@@ -2,23 +2,20 @@
 import axios, { type AxiosError } from 'axios';
 import useSWR from 'swr';
 
-import type { DummyResponse, Product } from '../types/types';
+import type { Cart, DummyResponse } from '../types/types';
 
 const fetcher = async (url: string) => {
-  const res = await axios.get<DummyResponse<'products', Product>>(url);
+  const res = await axios.get<DummyResponse<'carts', Cart>>(url);
   return res.data;
 };
 
-function useProducts() {
-  const { data, ...rest } = useSWR<DummyResponse<'products', Product>, AxiosError>(
-    `/api/carts?skip=0&limit=20`,
-    fetcher
-  );
+function useCarts() {
+  const { data, ...rest } = useSWR<DummyResponse<'carts', Cart>, AxiosError>(`/api/carts?skip=0&limit=20`, fetcher);
 
   return {
-    data: data?.products,
+    data: data?.carts,
     ...rest,
   };
 }
 
-export default useProducts;
+export default useCarts;
