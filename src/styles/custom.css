@@ -1,0 +1,21 @@
+.bg-mesh {
+  background-color: rgb(231, 229, 228);
+  background-image: radial-gradient(at 19% 76%, rgb(255, 228, 230) 0, transparent 99%), radial-gradient(at 21% 58%, rgb(202, 138, 4) 0, transparent 59%), radial-gradient(at 25% 57%, rgb(113, 113, 122) 0, transparent 84%), radial-gradient(at 100% 4%, rgb(243, 232, 255) 0, transparent 72%), radial-gradient(at 17% 29%, rgb(252, 231, 243) 0, transparent 20%), radial-gradient(at 17% 64%, rgb(129, 140, 248) 0, transparent 89%);
+}
+
+.bg-conic-l {
+  background-image: conic-gradient(at left, var(--tw-gradient-stops))
+}
+
+.bg-conic-t {
+  background-image: conic-gradient(at top, var(--tw-gradient-stops))
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
