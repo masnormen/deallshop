@@ -14,16 +14,6 @@ const config = {
     locales: ['en'],
     defaultLocale: 'en',
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'i.dummyjson.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },

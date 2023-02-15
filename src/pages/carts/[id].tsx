@@ -9,6 +9,7 @@ import useCartDetails from '../../hooks/useCartDetails';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { CartProduct } from '../../types/types';
 import Link from 'next/link';
+import Head from 'next/head';
 
 function CartDetails() {
   const router = useRouter();
@@ -46,42 +47,47 @@ function CartDetails() {
   const { products: rows, isLoading } = useCartDetails(id as string);
 
   return (
-    <main className="bg-mesh flex min-h-screen flex-col items-center justify-center from-yellow-200 via-red-500 to-fuchsia-500 bg-fixed">
-      <div className="container flex max-w-4xl flex-col items-center justify-center space-y-6 px-8 py-32 lg:py-48 lg:px-12">
-        <div className="flex flex-row space-x-4">
-          <Link href="/">
-            <button
-              type="button"
-              className="relative w-full rounded-lg border-2 border-gray-200 bg-white py-2 px-2 text-lg shadow-md hover:bg-gray-300 hover:outline-none focus:ring-0"
-            >
-              Products
-            </button>
-          </Link>
-          <Link href="/carts">
-            <button
-              type="button"
-              className="relative w-full rounded-lg border-2 border-gray-200 bg-white py-2 px-2 text-lg shadow-md hover:bg-gray-300 hover:outline-none focus:ring-0"
-            >
-              Carts
-            </button>
-          </Link>
-        </div>
-        <h1 className="flex bg-gradient-to-t from-gray-900 to-gray-700 bg-clip-text text-center text-lg font-extrabold leading-relaxed text-transparent">
-          Cart #{id}
-        </h1>
-        <div className="flex w-full flex-col space-y-6">
-          <Table<CartProduct> isLoading={isLoading} columns={columns} rows={rows ?? []} hiddenColumns={[]} />
-        </div>
-        <footer className="flex space-y-3 pt-24 text-center text-gray-800">
-          <div>
-            Created by{' '}
-            <a href="https://github.com/masnormen/" className="font-bold text-sky-800">
-              Nourman Hajar
-            </a>
+    <>
+      <Head>
+        <title>Cart #{id}</title>
+      </Head>
+      <main className="bg-mesh flex min-h-screen flex-col items-center justify-center from-yellow-200 via-red-500 to-fuchsia-500 bg-fixed">
+        <div className="container flex max-w-4xl flex-col items-center justify-center space-y-6 px-8 py-32 lg:py-48 lg:px-12">
+          <div className="flex flex-row space-x-4">
+            <Link href="/">
+              <button
+                type="button"
+                className="relative w-full rounded-lg border-2 border-gray-200 bg-white py-2 px-2 text-lg shadow-md hover:bg-gray-300 hover:outline-none focus:ring-0"
+              >
+                Products
+              </button>
+            </Link>
+            <Link href="/carts">
+              <button
+                type="button"
+                className="relative w-full rounded-lg border-2 border-gray-200 bg-white py-2 px-2 text-lg shadow-md hover:bg-gray-300 hover:outline-none focus:ring-0"
+              >
+                Carts
+              </button>
+            </Link>
           </div>
-        </footer>
-      </div>
-    </main>
+          <h1 className="flex bg-gradient-to-t from-gray-900 to-gray-700 bg-clip-text text-center text-lg font-extrabold leading-relaxed text-transparent">
+            Cart #{id}
+          </h1>
+          <div className="flex w-full flex-col space-y-6">
+            <Table<CartProduct> isLoading={isLoading} columns={columns} rows={rows ?? []} hiddenColumns={[]} />
+          </div>
+          <footer className="flex space-y-3 pt-24 text-center text-gray-800">
+            <div>
+              Created by{' '}
+              <a href="https://github.com/masnormen/" className="font-bold text-sky-800">
+                Nourman Hajar
+              </a>
+            </div>
+          </footer>
+        </div>
+      </main>
+    </>
   );
 }
 
